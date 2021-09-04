@@ -1246,8 +1246,9 @@ class PHPMailer
         $pos = strrpos($address, '@');
         if (
             (false === $pos)
-            || ((!$this->has8bitChars(substr($address, ++$pos)) || !static::idnSupported())
-            && !static::validateAddress($address))
+            || ((!$this->has8bitChars(substr($address, ++$pos)) || static::idnSupported())
+            //&& !static::validateAddress($address)
+            )
         ) {
             $error_message = sprintf(
                 '%s (From): %s',
@@ -1320,6 +1321,9 @@ class PHPMailer
         if (strpos($address, "\n") !== false || strpos($address, "\r") !== false) {
             return false;
         }
+        echo "patternselect"; echo "<pre>";
+        print_r($patternselect);
+        echo "</pre>";
         switch ($patternselect) {
             case 'pcre': //Kept for BC
             case 'pcre8':
@@ -1364,7 +1368,8 @@ class PHPMailer
                 );
             case 'php':
             default:
-                return filter_var($address, FILTER_VALIDATE_EMAIL) !== false;
+                // return filter_var($address, FILTER_VALIDATE_EMAIL) !== false;
+                return (bool) preg_match("/^[ก-๙a-zA-Z0-9_+&*-]+(?:\.[ก-๙a-zA-Z0-9_+&*-]+)*@(?:[ก-๙a-zA-Z0-9-]+\.)+[ก-๙a-zA-Z]{2,16}$/u", $address);
         }
     }
 
@@ -1492,10 +1497,28 @@ class PHPMailer
             $this->mailHeader = '';
 
             // Dequeue recipient and Reply-To addresses with IDN
+            echo "print_r RecipientsQueue";
+            print_r($this->RecipientsQueue);
+            echo "print_r ReplyToQueue";
+            print_r($this->ReplyToQueue);
+            
+
             foreach (array_merge($this->RecipientsQueue, $this->ReplyToQueue) as $params) {
+                print_r($params);
+                
                 $params[1] = $this->punyencodeAddress($params[1]);
+                print_r($params);
+
                 call_user_func_array([$this, 'addAnAddress'], $params);
             }
+            echo "print_r to";
+            print_r($this->to);
+            echo "print_r cc";
+            print_r($this->cc);
+            echo "print_r bcc";
+            print_r($this->bcc);
+            
+
             if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
                 throw new Exception($this->lang('provide_address'), self::STOP_CRITICAL);
             }
@@ -1507,7 +1530,8 @@ class PHPMailer
                     continue;
                 }
                 $this->$address_kind = $this->punyencodeAddress($this->$address_kind);
-                if (!static::validateAddress($this->$address_kind)) {
+                //if (!static::validateAddress($this->$address_kind)) {
+                if (false) {
                     $error_message = sprintf(
                         '%s (%s): %s',
                         $this->lang('invalid_address'),
@@ -3361,7 +3385,9 @@ class PHPMailer
      */
     public function has8bitChars($text)
     {
-        return (bool) preg_match('/[\x80-\xFF]/', $text);
+        // return (bool) preg_match('/[\x80-\xFF]/', $text);
+        return true;
+        
     }
 
     /**

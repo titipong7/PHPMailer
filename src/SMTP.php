@@ -873,7 +873,9 @@ class SMTP
 
         return $this->sendCommand(
             'MAIL FROM',
-            'MAIL FROM:<' . $from . '>' . $useVerp,
+            // 'MAIL FROM:<' . $from . '> ' . $useVerp,
+             'MAIL FROM:<' . $from . '> SMTPUTF8',
+            
             250
         );
     }
