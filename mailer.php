@@ -5,17 +5,17 @@ require '../PHPMailer/src/SMTP.php';
 
 $mail = new PHPMailer();
 $mail->isSMTP();
-$mail->Host = "mail.kon.in.th";
+//## $mail->Host = "mail.kon.in.th";
 $mail->SMTPAuth = true;
 $mail->CharSet = "utf-8";
 $mail->ContentType = 'text/html';
 $mail->Encoding = 'base64';
 // $mail->Username = 'ฐิติพงศ์@คน.ไทย';
-$mail->Username = 'titipong@kon.in.th';
-$mail->Password = 'McyPZ-1_Nf_9';
+//## $mail->Username = 'titipong@kon.in.th';
+//## $mail->Password = 'McyPZ-1_Nf_9';
 // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; PHPMailer::ENCRYPTION_SMTPS also accepted
 $mail->SMTPSecure = "tls"; // Enable TLS encryption; PHPMailer::ENCRYPTION_SMTPS also accepted
-$mail->Port = 587; // TCP port to connect to
+//## $mail->Port = 587; // TCP port to connect to
 $mail->setFrom('ติดต่อ@คน.ไทย');
 // $mail->addAddress('contact@kon.in.th');
 //  $mail->addAddress('ติดต่อ@คน.ไทย');
